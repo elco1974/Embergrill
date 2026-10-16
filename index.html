@@ -56,6 +56,15 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
   <button class="primary" id="controlBtn">Test connection (not configured)</button>
   <div class="notice">Demo only: this screen uses sample values. No commands are sent to your physical grill.</div>
  </div>
+ <h2>Shutdown cycle</h2>
+ <div class="card section">
+  <div class="row"><div><div class="eyebrow">15-MINUTE SHUTDOWN</div><div class="small">Use the controller's own shutdown process when connected.</div></div><span id="shutdownBadge" class="pill">NOT STARTED</span></div>
+  <div id="shutdownCountdown" style="font-size:36px;font-weight:800;letter-spacing:-.04em;margin:16px 0 4px;font-variant-numeric:tabular-nums">15:00</div>
+  <div id="shutdownStatus" class="small">Demo interface only · no command will be sent to the grill.</div>
+  <button class="primary" id="startShutdown">Start 15-minute demo countdown</button>
+  <button class="secondary" id="cancelShutdown" style="width:100%;margin-top:8px" disabled>Cancel countdown</button>
+  <div class="notice">Safety: this is only a timer demonstration. It does not shut down the grill or confirm that the grill has cooled. Stay with the grill and follow the manufacturer's shutdown instructions.</div>
+ </div>
 </section>
 <section id="cook" class="page">
  <h2 style="margin-top:4px">Cook planner</h2>
@@ -132,6 +141,40 @@ let active=false;document.querySelector('#startCook').addEventListener('click',(
 document.querySelector('#controlBtn').addEventListener('click',()=>alert('The CTP3 integration is not configured yet. No connection attempt or grill command was made.'));
 setTarget(target.value);
 
+
+
+// 15-minute shutdown countdown — interface demo only; no controller commands.
+let shutdownTimerId=null, shutdownEndsAt=0;
+const shutdownStart=document.querySelector('#startShutdown');
+const shutdownCancel=document.querySelector('#cancelShutdown');
+function renderShutdownTime(){
+ const secondsLeft=Math.max(0,Math.ceil((shutdownEndsAt-Date.now())/1000));
+ document.querySelector('#shutdownCountdown').textContent=String(Math.floor(secondsLeft/60)).padStart(2,'0')+':'+String(secondsLeft%60).padStart(2,'0');
+ if(secondsLeft<=0){
+  clearInterval(shutdownTimerId);shutdownTimerId=null;
+  shutdownStart.disabled=false;shutdownCancel.disabled=true;
+  shutdownStart.textContent='Restart demo countdown';
+  document.querySelector('#shutdownBadge').textContent='TIMER ENDED';
+  document.querySelector('#shutdownStatus').textContent='Demo countdown finished. Grill shutdown has NOT been performed or verified.';
+ }
+}
+shutdownStart.addEventListener('click',()=>{
+ if(!confirm('Start a 15-minute DEMO countdown? This will not shut down the grill. Follow the controller manufacturer’s shutdown instructions.'))return;
+ if(shutdownTimerId)clearInterval(shutdownTimerId);
+ shutdownEndsAt=Date.now()+15*60*1000;
+ shutdownStart.disabled=true;shutdownCancel.disabled=false;
+ shutdownStart.textContent='Demo countdown running…';
+ document.querySelector('#shutdownBadge').textContent='RUNNING';
+ document.querySelector('#shutdownStatus').textContent='Countdown running locally in this page. No grill command has been sent.';
+ renderShutdownTime();shutdownTimerId=setInterval(renderShutdownTime,1000);
+});
+shutdownCancel.addEventListener('click',()=>{
+ if(shutdownTimerId)clearInterval(shutdownTimerId);shutdownTimerId=null;shutdownEndsAt=0;
+ document.querySelector('#shutdownCountdown').textContent='15:00';
+ document.querySelector('#shutdownBadge').textContent='CANCELLED';
+ document.querySelector('#shutdownStatus').textContent='Demo countdown cancelled. Grill status is unchanged.';
+ shutdownStart.disabled=false;shutdownCancel.disabled=true;shutdownStart.textContent='Start 15-minute demo countdown';
+});
 
 // Dark mode preference
 const themeToggle=document.querySelector('#darkModeToggle');
