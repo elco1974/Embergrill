@@ -94,7 +94,12 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
  <div class="notice">Notes and custom recipes stay in this browser on this device. They are not synced or backed up to an account.</div>
 </section>
 <section id="settings" class="page">
- <h2 style="margin-top:4px">Controller settings</h2>
+ <h2 style="margin-top:4px">Appearance</h2>
+ <div class="card">
+  <div class="toggle"><div><strong>Dark mode</strong><div class="small">Use a darker color theme throughout the app.</div></div><input id="darkModeToggle" type="checkbox" aria-label="Enable dark mode"></div>
+  <div class="small" id="themeStatus">Theme preference is saved on this device.</div>
+ </div>
+ <h2>Controller settings</h2>
  <div class="card">
   <div class="row"><span class="small">Controller family</span><strong>CTP3</strong></div><div class="line"></div>
   <div class="row"><span class="small">App ecosystem</span><strong>GrillirG Control</strong></div><div class="line"></div>
@@ -132,15 +137,17 @@ setTarget(target.value);
 const themeToggle=document.querySelector('#darkModeToggle');
 function applyTheme(isDark){
  document.documentElement.dataset.theme=isDark?'dark':'light';
- themeToggle.checked=isDark;
+ if(themeToggle) themeToggle.checked=isDark;
  try{localStorage.setItem('emberTheme',isDark?'dark':'light')}catch(e){}
  document.querySelector('meta[name="theme-color"]').content=isDark?'#111713':'#202a25';
- document.querySelector('#themeStatus').textContent=isDark?'Dark mode is on · saved on this device':'Light mode is on · saved on this device';
+ const status=document.querySelector('#themeStatus');
+ if(status) status.textContent=isDark?'Dark mode is on · saved on this device':'Light mode is on · saved on this device';
 }
 let savedTheme='light';try{savedTheme=localStorage.getItem('emberTheme')||'light'}catch(e){}
 applyTheme(savedTheme==='dark');
-themeToggle.addEventListener('change',()=>applyTheme(themeToggle.checked));
-\n// Recipe search and local custom recipes
+if(themeToggle) themeToggle.addEventListener('change',()=>applyTheme(themeToggle.checked));
+
+// Recipe search and local custom recipes
 const recipeSearch=document.querySelector('#recipeSearch');
 recipeSearch.addEventListener('input',()=>{const q=recipeSearch.value.toLowerCase();document.querySelectorAll('#recipeList details').forEach(card=>card.style.display=card.textContent.toLowerCase().includes(q)?'':'none')});
 function readCustomRecipes(){try{return JSON.parse(localStorage.getItem('emberCustomRecipes')||'[]')}catch(e){return []}}
