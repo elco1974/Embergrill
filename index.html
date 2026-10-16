@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#202a25">
+<title>Ember Grill</title>
+<style>
+:root{--bg:#f4f5f2;--ink:#1d2822;--muted:#68736c;--green:#202a25;--panel:#fff;--orange:#d78343;--line:#e1e5df}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--green);color:white;padding:calc(18px + env(safe-area-inset-top)) 20px 22px;border-radius:0 0 24px 24px}
+.brand{display:flex;align-items:center;justify-content:space-between;font-weight:800;letter-spacing:.12em;font-size:20px}.flame{color:#efa35d;font-size:24px}.pill{font-size:11px;letter-spacing:.04em;padding:6px 9px;border-radius:999px;background:#59472f;color:#ffd8a5}
+.status{color:#d1d9d2;font-size:13px;margin-top:15px;display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:#efa35d}
+main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 2px 10px #18251a08}.eyebrow{font-size:11px;color:var(--muted);font-weight:750;letter-spacing:.09em}.big{font-size:34px;font-weight:800;letter-spacing:-.04em;margin:8px 0 4px}.small{font-size:12px;color:var(--muted)}h2{font-size:19px;margin:22px 2px 12px}.section{margin-top:16px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.probe{font-size:24px;font-weight:750;margin:10px 0 3px}.bar{height:8px;background:#e9ece7;border-radius:10px;overflow:hidden;margin:14px 0 4px}.bar span{display:block;height:100%;width:17%;background:var(--orange);border-radius:10px}label{font-weight:650;font-size:14px}input[type=range]{width:100%;accent-color:var(--orange);margin:14px 0}select,input,button{font:inherit}select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--ink)}button{border:0;border-radius:13px;padding:14px 16px;font-weight:700;cursor:pointer}.primary{background:var(--green);color:white;width:100%;margin-top:14px}.secondary{background:#edf0eb;color:var(--ink)}.notice{background:#fff4e5;border:1px solid #f0d5af;border-radius:14px;padding:12px 14px;font-size:12px;line-height:1.45;color:#694b2c;margin-top:14px}.tabs{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around}.tab{flex:1;text-align:center;color:var(--muted);font-size:11px;padding:7px 2px;border-radius:12px;cursor:pointer}.tab.active{color:var(--green);background:#edf0eb;font-weight:750}.tab b{display:block;font-size:19px;margin-bottom:3px}.page{display:none}.page.active{display:block}.line{height:1px;background:var(--line);margin:15px 0}.empty{text-align:center;padding:44px 15px;color:var(--muted)}.toggle{display:flex;align-items:center;justify-content:space-between;padding:13px 0}.toggle input{width:20px;height:20px;accent-color:var(--orange)}.success{color:#38784e;font-weight:650;font-size:13px}.footer{text-align:center;color:var(--muted);font-size:11px;margin:20px 0}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><span><span class="flame">♨</span> EMBER</span><span class="pill">DEMO MODE</span></div>
+ <div class="status"><span class="dot"></span><span id="connection">CTP3 · controller not connected</span></div>
+</header>
+<main>
+<section id="grill" class="page active">
+ <div class="grid">
+  <div class="card"><div class="eyebrow">GRILL TEMP</div><div class="big"><span id="grillTemp">218</span>°</div><div class="small">Sample reading · °F</div></div>
+  <div class="card"><div class="eyebrow">SETPOINT PREVIEW</div><div class="big"><span id="targetOut">225</span>°</div><div class="small">Not sent to grill</div></div>
+ </div>
+ <div class="card section">
+  <div class="row"><span class="eyebrow">TEMPERATURE RANGE</span><span class="small">150–550°F</span></div>
+  <div class="bar"><span id="tempBar"></span></div>
+  <div class="row small"><span>Warm smoke</span><span>High heat</span></div>
+ </div>
+ <h2>Meat probes</h2>
+ <div class="grid" style="margin-top:0">
+  <div class="card"><div class="eyebrow">PROBE 1</div><div class="probe"><span id="probe1">154</span>°F</div><div class="small">Sample reading</div></div>
+  <div class="card"><div class="eyebrow">PROBE 2</div><div class="probe"><span id="probe2">138</span>°F</div><div class="small">Sample reading</div></div>
+ </div>
+ <h2>Setpoint preview</h2>
+ <div class="card">
+  <div class="row"><label for="target">Grill target</label><strong><span id="targetLabel">225</span>°F</strong></div>
+  <input id="target" type="range" min="165" max="500" step="5" value="225">
+  <div class="row small"><span>165°F</span><span>350°F</span><span>500°F</span></div>
+  <button class="primary" id="controlBtn">Test connection (not configured)</button>
+  <div class="notice">Demo only: this screen uses sample values. No commands are sent to your physical grill.</div>
+ </div>
+</section>
+<section id="cook" class="page">
+ <h2 style="margin-top:4px">Cook planner</h2>
+ <div class="card">
+  <label for="preset">Cooking program</label>
+  <select id="preset" style="margin:10px 0 18px">
+   <option value="225">Brisket · low and slow</option><option value="225">Pork butt · pulled pork</option><option value="225">Ribs · barbecue</option><option value="350">Chicken · hot and fast</option><option value="225">Custom cook</option>
+  </select>
+  <div class="row"><label for="probeTarget">Probe target</label><strong><span id="probeTargetLabel">203</span>°F</strong></div>
+  <input id="probeTarget" type="range" min="100" max="210" value="203">
+  <div id="probeMessage" class="small">65°F to target on probe 1 (demo)</div>
+  <div class="line"></div>
+  <div class="toggle"><label for="alerts">Cook alerts preference</label><input id="alerts" type="checkbox" checked></div>
+  <button id="startCook" class="primary">Start demo cook</button>
+  <p id="cookStatus" class="small">A demo session does not control the grill.</p>
+ </div>
+ <div class="notice">Cooking stages and notifications are planned features; they are not active in this prototype.</div>
+</section>
+<section id="history" class="page">
+ <div class="empty"><div style="font-size:40px">⌁</div><h2>No saved cooks yet</h2><p>Once a verified live integration is added, Ember can save temperature curves, cook duration, probe targets, and your notes.</p></div>
+</section>
+<section id="settings" class="page">
+ <h2 style="margin-top:4px">Controller settings</h2>
+ <div class="card">
+  <div class="row"><span class="small">Controller family</span><strong>CTP3</strong></div><div class="line"></div>
+  <div class="row"><span class="small">App ecosystem</span><strong>GrillirG Control</strong></div><div class="line"></div>
+  <div class="row"><span class="small">Connection</span><strong>Wi‑Fi / cloud</strong></div><div class="line"></div>
+  <div class="row"><span class="small">Integration status</span><strong>Not configured</strong></div>
+  <div class="notice">The exact CTP3-W firmware and API compatibility still need verification. Credentials should be handled by a secure backend, never stored in this static app.</div>
+ </div>
+ <h2>Next development steps</h2>
+ <div class="card small" style="line-height:1.8">1. Verify CTP3 cloud API compatibility<br>2. Add secure sign-in and read-only live data<br>3. Test temperature control safely<br>4. Add alerts, cook history, and cook stages</div>
+</section>
+<div class="footer">EMBER · Unofficial prototype · Not affiliated with Traeger or GrillirG</div>
+</main>
+<nav class="tabs">
+ <div class="tab active" data-page="grill"><b>⌂</b>Grill</div>
+ <div class="tab" data-page="cook"><b>♨</b>Cook</div>
+ <div class="tab" data-page="history"><b>⌁</b>History</div>
+ <div class="tab" data-page="settings"><b>⚙</b>Settings</div>
+</nav>
+<script>
+const target=document.querySelector('#target');
+function setTarget(v){document.querySelector('#targetOut').textContent=v;document.querySelector('#targetLabel').textContent=v;document.querySelector('#tempBar').style.width=Math.max(0,Math.min(100,(218-150)/400*100))+'%'}
+target.addEventListener('input',e=>setTarget(e.target.value));
+document.querySelector('#preset').addEventListener('change',e=>{target.value=e.target.value;setTarget(e.target.value)});
+const probeTarget=document.querySelector('#probeTarget');
+probeTarget.addEventListener('input',e=>{document.querySelector('#probeTargetLabel').textContent=e.target.value;document.querySelector('#probeMessage').textContent=(Math.max(0,Number(e.target.value)-154))+'°F to target on probe 1 (demo)'});
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.page))}));
+let active=false;document.querySelector('#startCook').addEventListener('click',()=>{active=!active;document.querySelector('#startCook').textContent=active?'End demo cook':'Start demo cook';document.querySelector('#cookStatus').textContent=active?'Demo cook session active. Physical grill remains untouched.':'Demo session ended.'});
+document.querySelector('#controlBtn').addEventListener('click',()=>alert('The CTP3 integration is not configured yet. No connection attempt or grill command was made.'));
+setTarget(target.value);
+</script>
+</body>
+</html>
