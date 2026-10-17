@@ -25,6 +25,12 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 :root[data-theme="dark"] .tab.active{color:#f3c18e;background:#303d34}
 :root[data-theme="dark"] .card{box-shadow:0 2px 10px #00000018}
 
+
+.probe-card{cursor:pointer;transition:border-color .15s}
+.probe-card:focus{outline:2px solid var(--orange);outline-offset:2px}
+.probe-picker[hidden]{display:none}
+.probe-picker{cursor:default}
+.probe-card .food-select{font-size:14px}
 </style>
 </head>
 <body>
@@ -44,25 +50,40 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
   <div class="row small"><span>Warm smoke</span><span>High heat</span></div>
  </div>
  <h2>Meat probes</h2>
+ <p class="small">Tap a probe to choose a food and set its target temperature.</p>
  <div class="grid" style="margin-top:0">
-  <div class="card">
-   <div class="eyebrow">PROBE 1</div><div class="probe"><span id="probe1">154</span>°F</div><div class="small">Sample reading</div>
-   <div class="line"></div>
-   <label for="probe1Target">Target temperature (°F)</label>
-   <input id="probe1Target" class="probe-target-input" type="number" min="80" max="210" value="165" inputmode="numeric" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:8px">
-   <div class="toggle"><label for="probe1Alarm">Probe alarm</label><input id="probe1Alarm" type="checkbox" checked aria-label="Enable Probe 1 alarm"></div>
-   <div id="probe1AlarmStatus" class="small">Alarm enabled at 165°F</div>
+  <div class="card probe-card" role="button" tabindex="0" data-probe="1" aria-label="Configure Probe 1">
+   <div class="row"><div class="eyebrow">PROBE 1 · TAP TO SET UP</div><icon name="chevron-down" size="sm" /></div>
+   <div class="probe"><span id="probe1">154</span>°F</div><div id="probe1FoodLabel" class="small">No food selected</div>
+   <div id="probe1Picker" class="probe-picker" hidden>
+    <div class="line"></div><label for="probe1Food">Food type</label>
+    <select id="probe1Food" class="food-select" style="margin-top:8px">
+     <option value="">Choose food…</option><option value="beef-steak">Beef — steak/roast</option><option value="beef-ground">Beef — ground</option><option value="chicken">Chicken / poultry</option><option value="pork-cut">Pork — chop/roast</option><option value="pork-ground">Pork — ground</option><option value="seafood">Fish / seafood</option>
+    </select>
+    <div class="row" style="margin-top:14px"><label for="probe1Target">Target temperature</label><strong><span id="probe1TargetLabel">145</span>°F</strong></div>
+    <input id="probe1Target" class="probe-target-input" type="range" min="120" max="210" step="1" value="145" style="width:100%">
+    <div id="probe1Safety" class="small">USDA minimum: 145°F with 3-minute rest.</div>
+    <div class="toggle"><label for="probe1Alarm">Probe alarm</label><input id="probe1Alarm" type="checkbox" checked aria-label="Enable Probe 1 alarm"></div>
+    <div id="probe1AlarmStatus" class="small">Alarm enabled</div>
+   </div>
   </div>
-  <div class="card">
-   <div class="eyebrow">PROBE 2</div><div class="probe"><span id="probe2">138</span>°F</div><div class="small">Sample reading</div>
-   <div class="line"></div>
-   <label for="probe2Target">Target temperature (°F)</label>
-   <input id="probe2Target" class="probe-target-input" type="number" min="80" max="210" value="145" inputmode="numeric" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:8px">
-   <div class="toggle"><label for="probe2Alarm">Probe alarm</label><input id="probe2Alarm" type="checkbox" checked aria-label="Enable Probe 2 alarm"></div>
-   <div id="probe2AlarmStatus" class="small">Alarm enabled at 145°F</div>
+  <div class="card probe-card" role="button" tabindex="0" data-probe="2" aria-label="Configure Probe 2">
+   <div class="row"><div class="eyebrow">PROBE 2 · TAP TO SET UP</div><icon name="chevron-down" size="sm" /></div>
+   <div class="probe"><span id="probe2">138</span>°F</div><div id="probe2FoodLabel" class="small">No food selected</div>
+   <div id="probe2Picker" class="probe-picker" hidden>
+    <div class="line"></div><label for="probe2Food">Food type</label>
+    <select id="probe2Food" class="food-select" style="margin-top:8px">
+     <option value="">Choose food…</option><option value="beef-steak">Beef — steak/roast</option><option value="beef-ground">Beef — ground</option><option value="chicken">Chicken / poultry</option><option value="pork-cut">Pork — chop/roast</option><option value="pork-ground">Pork — ground</option><option value="seafood">Fish / seafood</option>
+    </select>
+    <div class="row" style="margin-top:14px"><label for="probe2Target">Target temperature</label><strong><span id="probe2TargetLabel">145</span>°F</strong></div>
+    <input id="probe2Target" class="probe-target-input" type="range" min="120" max="210" step="1" value="145" style="width:100%">
+    <div id="probe2Safety" class="small">USDA minimum: 145°F with 3-minute rest.</div>
+    <div class="toggle"><label for="probe2Alarm">Probe alarm</label><input id="probe2Alarm" type="checkbox" checked aria-label="Enable Probe 2 alarm"></div>
+    <div id="probe2AlarmStatus" class="small">Alarm enabled</div>
+   </div>
   </div>
  </div>
- <div class="notice">Probe alarm controls are interface-only right now. Readings are samples, so no real alarm will sound until controller data and alert behavior are integrated.</div>
+ <div class="notice">USDA minimum temperatures are food-safety targets, not doneness preferences. Beef steaks/roasts and pork chops/roasts: 145°F plus a 3-minute rest; ground beef and pork: 160°F; all poultry: 165°F; fish and shellfish: 145°F. Use a food thermometer. Sample readings mean actual alerts are not active yet. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noopener">USDA temperature chart</a>.</div>
  <h2>Setpoint preview</h2>
  <div class="card">
   <div class="row"><label for="target">Grill target</label><strong><span id="targetLabel">225</span>°F</strong></div>
@@ -159,30 +180,61 @@ setTarget(target.value);
 
 
 
-// Probe alarm preference UI. Demo only; does not generate real alerts.
+// Per-probe food presets, target slider, and alarm preference (UI only).
+const foodPresets = {
+ "beef-steak": {label:"Beef steak / roast", temp:145, safety:"USDA minimum: 145°F plus a 3-minute rest."},
+ "beef-ground": {label:"Ground beef", temp:160, safety:"USDA minimum: 160°F."},
+ "chicken": {label:"Chicken / poultry", temp:165, safety:"USDA minimum: 165°F for all poultry."},
+ "pork-cut": {label:"Pork chop / roast", temp:145, safety:"USDA minimum: 145°F plus a 3-minute rest."},
+ "pork-ground": {label:"Ground pork", temp:160, safety:"USDA minimum: 160°F."},
+ "seafood": {label:"Fish / seafood", temp:145, safety:"USDA minimum: 145°F."}
+};
 [1,2].forEach(n=>{
+ const card=document.querySelector('.probe-card[data-probe="'+n+'"]');
+ const picker=document.querySelector('#probe'+n+'Picker');
+ const food=document.querySelector('#probe'+n+'Food');
  const target=document.querySelector('#probe'+n+'Target');
- const toggle=document.querySelector('#probe'+n+'Alarm');
+ const targetLabel=document.querySelector('#probe'+n+'TargetLabel');
+ const alarm=document.querySelector('#probe'+n+'Alarm');
  const status=document.querySelector('#probe'+n+'AlarmStatus');
+ const safety=document.querySelector('#probe'+n+'Safety');
+ const foodLabel=document.querySelector('#probe'+n+'FoodLabel');
  const savedTarget=localStorage.getItem('emberProbe'+n+'Target');
+ const savedFood=localStorage.getItem('emberProbe'+n+'Food');
  const savedAlarm=localStorage.getItem('emberProbe'+n+'Alarm');
- if(savedTarget && Number(savedTarget)>=80 && Number(savedTarget)<=210) target.value=savedTarget;
- if(savedAlarm!==null) toggle.checked=savedAlarm==='on';
- function update(){
+ if(savedTarget && Number(savedTarget)>=120 && Number(savedTarget)<=210) target.value=savedTarget;
+ if(savedFood && foodPresets[savedFood]) food.value=savedFood;
+ if(savedAlarm!==null) alarm.checked=savedAlarm==='on';
+ function refresh(){
   const temp=Number(target.value);
-  status.textContent=toggle.checked
-   ? 'Alarm enabled at '+(Number.isFinite(temp)&&temp>=80&&temp<=210?temp:'—')+'°F'
-   : 'Alarm silenced for this probe';
+  targetLabel.textContent=temp;
+  const preset=foodPresets[food.value];
+  foodLabel.textContent=preset ? preset.label+' · target '+temp+'°F' : 'No food selected · custom target '+temp+'°F';
+  safety.textContent=preset ? preset.safety : 'Choose a food to see its USDA safety temperature.';
+  status.textContent=alarm.checked?'Alarm enabled for this probe':'Alarm silenced for this probe';
   try{
    localStorage.setItem('emberProbe'+n+'Target',target.value);
-   localStorage.setItem('emberProbe'+n+'Alarm',toggle.checked?'on':'off');
+   localStorage.setItem('emberProbe'+n+'Alarm',alarm.checked?'on':'off');
+   if(food.value) localStorage.setItem('emberProbe'+n+'Food',food.value);
+   else localStorage.removeItem('emberProbe'+n+'Food');
   }catch(e){}
  }
- target.addEventListener('change',update);
- toggle.addEventListener('change',update);
- update();
+ function togglePicker(e){
+  if(e && e.target.closest('input,select,label,button,a')) return;
+  picker.hidden=!picker.hidden;
+ }
+ card.addEventListener('click',togglePicker);
+ card.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ') && !e.target.closest('input,select,label,button,a')){e.preventDefault();picker.hidden=!picker.hidden;}});
+ picker.addEventListener('click',e=>e.stopPropagation());
+ food.addEventListener('change',()=>{
+  const preset=foodPresets[food.value];
+  if(preset) target.value=preset.temp;
+  refresh();
+ });
+ target.addEventListener('input',refresh);
+ alarm.addEventListener('change',refresh);
+ refresh();
 });
-
 // 15-minute shutdown countdown — interface demo only; no controller commands.
 let shutdownTimerId=null, shutdownEndsAt=0;
 const shutdownStart=document.querySelector('#startShutdown');
