@@ -102,23 +102,6 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
   <div class="notice">Safety: this is only a timer demonstration. It does not shut down the grill or confirm that the grill has cooled. Stay with the grill and follow the manufacturer's shutdown instructions.</div>
  </div>
 </section>
-<section id="cook" class="page">
- <h2 style="margin-top:4px">Cook planner</h2>
- <div class="card">
-  <label for="preset">Cooking program</label>
-  <select id="preset" style="margin:10px 0 18px">
-   <option value="225">Brisket · low and slow</option><option value="225">Pork butt · pulled pork</option><option value="225">Ribs · barbecue</option><option value="350">Chicken · hot and fast</option><option value="225">Custom cook</option>
-  </select>
-  <div class="row"><label for="probeTarget">Probe target</label><strong><span id="probeTargetLabel">203</span>°F</strong></div>
-  <input id="probeTarget" type="range" min="100" max="210" value="203">
-  <div id="probeMessage" class="small">65°F to target on probe 1 (demo)</div>
-  <div class="line"></div>
-  <div class="toggle"><label for="alerts">Cook alerts preference</label><input id="alerts" type="checkbox" checked></div>
-  <button id="startCook" class="primary">Start demo cook</button>
-  <p id="cookStatus" class="small">A demo session does not control the grill.</p>
- </div>
- <div class="notice">Cooking stages and notifications are planned features; they are not active in this prototype.</div>
-</section>
 <section id="history" class="page">
  <div class="empty"><div style="font-size:40px">⌁</div><h2>No saved cooks yet</h2><p>Once a verified live integration is added, Ember can save temperature curves, cook duration, probe targets, and your notes.</p></div>
 </section>
@@ -159,7 +142,6 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 </main>
 <nav class="tabs">
  <div class="tab active" data-page="grill"><b>⌂</b>Grill</div>
- <div class="tab" data-page="cook"><b>♨</b>Cook</div>
  <div class="tab" data-page="history"><b>⌁</b>History</div>
  <div class="tab" data-page="recipes"><b>▤</b>Recipes</div>
  <div class="tab" data-page="notepad"><b>✎</b>Notepad</div>
@@ -169,11 +151,7 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 const target=document.querySelector('#target');
 function setTarget(v){document.querySelector('#targetOut').textContent=v;document.querySelector('#targetLabel').textContent=v;document.querySelector('#tempBar').style.width=Math.max(0,Math.min(100,(218-150)/400*100))+'%'}
 target.addEventListener('input',e=>setTarget(e.target.value));
-document.querySelector('#preset').addEventListener('change',e=>{target.value=e.target.value;setTarget(e.target.value)});
-const probeTarget=document.querySelector('#probeTarget');
-probeTarget.addEventListener('input',e=>{document.querySelector('#probeTargetLabel').textContent=e.target.value;document.querySelector('#probeMessage').textContent=(Math.max(0,Number(e.target.value)-154))+'°F to target on probe 1 (demo)'});
 document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.page))}));
-let active=false;document.querySelector('#startCook').addEventListener('click',()=>{active=!active;document.querySelector('#startCook').textContent=active?'End demo cook':'Start demo cook';document.querySelector('#cookStatus').textContent=active?'Demo cook session active. Physical grill remains untouched.':'Demo session ended.'});
 document.querySelector('#controlBtn').addEventListener('click',()=>alert('The CTP3 integration is not configured yet. No connection attempt or grill command was made.'));
 setTarget(target.value);
 
