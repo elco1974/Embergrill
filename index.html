@@ -45,9 +45,24 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
  </div>
  <h2>Meat probes</h2>
  <div class="grid" style="margin-top:0">
-  <div class="card"><div class="eyebrow">PROBE 1</div><div class="probe"><span id="probe1">154</span>°F</div><div class="small">Sample reading</div></div>
-  <div class="card"><div class="eyebrow">PROBE 2</div><div class="probe"><span id="probe2">138</span>°F</div><div class="small">Sample reading</div></div>
+  <div class="card">
+   <div class="eyebrow">PROBE 1</div><div class="probe"><span id="probe1">154</span>°F</div><div class="small">Sample reading</div>
+   <div class="line"></div>
+   <label for="probe1Target">Target temperature (°F)</label>
+   <input id="probe1Target" class="probe-target-input" type="number" min="80" max="210" value="165" inputmode="numeric" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:8px">
+   <div class="toggle"><label for="probe1Alarm">Probe alarm</label><input id="probe1Alarm" type="checkbox" checked aria-label="Enable Probe 1 alarm"></div>
+   <div id="probe1AlarmStatus" class="small">Alarm enabled at 165°F</div>
+  </div>
+  <div class="card">
+   <div class="eyebrow">PROBE 2</div><div class="probe"><span id="probe2">138</span>°F</div><div class="small">Sample reading</div>
+   <div class="line"></div>
+   <label for="probe2Target">Target temperature (°F)</label>
+   <input id="probe2Target" class="probe-target-input" type="number" min="80" max="210" value="145" inputmode="numeric" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;margin-top:8px">
+   <div class="toggle"><label for="probe2Alarm">Probe alarm</label><input id="probe2Alarm" type="checkbox" checked aria-label="Enable Probe 2 alarm"></div>
+   <div id="probe2AlarmStatus" class="small">Alarm enabled at 145°F</div>
+  </div>
  </div>
+ <div class="notice">Probe alarm controls are interface-only right now. Readings are samples, so no real alarm will sound until controller data and alert behavior are integrated.</div>
  <h2>Setpoint preview</h2>
  <div class="card">
   <div class="row"><label for="target">Grill target</label><strong><span id="targetLabel">225</span>°F</strong></div>
@@ -142,6 +157,31 @@ document.querySelector('#controlBtn').addEventListener('click',()=>alert('The CT
 setTarget(target.value);
 
 
+
+
+// Probe alarm preference UI. Demo only; does not generate real alerts.
+[1,2].forEach(n=>{
+ const target=document.querySelector('#probe'+n+'Target');
+ const toggle=document.querySelector('#probe'+n+'Alarm');
+ const status=document.querySelector('#probe'+n+'AlarmStatus');
+ const savedTarget=localStorage.getItem('emberProbe'+n+'Target');
+ const savedAlarm=localStorage.getItem('emberProbe'+n+'Alarm');
+ if(savedTarget && Number(savedTarget)>=80 && Number(savedTarget)<=210) target.value=savedTarget;
+ if(savedAlarm!==null) toggle.checked=savedAlarm==='on';
+ function update(){
+  const temp=Number(target.value);
+  status.textContent=toggle.checked
+   ? 'Alarm enabled at '+(Number.isFinite(temp)&&temp>=80&&temp<=210?temp:'—')+'°F'
+   : 'Alarm silenced for this probe';
+  try{
+   localStorage.setItem('emberProbe'+n+'Target',target.value);
+   localStorage.setItem('emberProbe'+n+'Alarm',toggle.checked?'on':'off');
+  }catch(e){}
+ }
+ target.addEventListener('change',update);
+ toggle.addEventListener('change',update);
+ update();
+});
 
 // 15-minute shutdown countdown — interface demo only; no controller commands.
 let shutdownTimerId=null, shutdownEndsAt=0;
