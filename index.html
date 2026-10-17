@@ -41,15 +41,12 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 <main>
 <section id="grill" class="page active">
  <div class="grid">
-  <div class="card"><div class="eyebrow">GRILL TEMP</div><div class="big"><span id="grillTemp">218</span>°</div><div class="small">Sample reading · °F</div></div>
-  <div class="card"><div class="eyebrow">SETPOINT PREVIEW</div><div class="big"><span id="targetOut">225</span>°</div><div class="small">Not sent to grill</div></div>
+  <div class="card"><div class="eyebrow">GRILL TEMP</div><div class="big"><span id="grillTemp">218</span>°</div>
  </div>
- <div class="card section">
-  <div class="row"><span class="eyebrow">TEMPERATURE RANGE</span><span class="small">150–550°F</span></div>
-  <div class="bar"><span id="tempBar"></span></div>
-  <div class="row small"><span>Warm smoke</span><span>High heat</span></div>
- </div>
- <h2>Meat probes</h2>
+ <h2>Setpoint preview</h2>
+ <div class="card">
+  <div class="row"><label for="target">Grill target</label><strong><span id="targetLabel">225</span>°F</strong></div>
+   <h2>Meat probes</h2>
  <p class="small">Tap a probe to choose a food and set its target temperature.</p>
  <div class="grid" style="margin-top:0">
   <div class="card probe-card" role="button" tabindex="0" data-probe="1" aria-label="Configure Probe 1">
@@ -84,14 +81,6 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
   </div>
  </div>
  <div class="notice">USDA minimum temperatures are food-safety targets, not doneness preferences. Beef steaks/roasts and pork chops/roasts: 145°F plus a 3-minute rest; ground beef and pork: 160°F; all poultry: 165°F; fish and shellfish: 145°F. Use a food thermometer. Sample readings mean actual alerts are not active yet. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart" target="_blank" rel="noopener">USDA temperature chart</a>.</div>
- <h2>Setpoint preview</h2>
- <div class="card">
-  <div class="row"><label for="target">Grill target</label><strong><span id="targetLabel">225</span>°F</strong></div>
-  <input id="target" type="range" min="165" max="500" step="5" value="225">
-  <div class="row small"><span>165°F</span><span>350°F</span><span>500°F</span></div>
-  <button class="primary" id="controlBtn">Test connection (not configured)</button>
-  <div class="notice">Demo only: this screen uses sample values. No commands are sent to your physical grill.</div>
- </div>
  <h2>Shutdown cycle</h2>
  <div class="card section">
   <div class="row"><div><div class="eyebrow">15-MINUTE SHUTDOWN</div><div class="small">Use the controller's own shutdown process when connected.</div></div><span id="shutdownBadge" class="pill">NOT STARTED</span></div>
