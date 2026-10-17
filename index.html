@@ -41,12 +41,17 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 <main>
 <section id="grill" class="page active">
  <div class="grid">
-  <div class="card"><div class="eyebrow">GRILL TEMP</div><div class="big"><span id="grillTemp">218</span>°</div>
+  <div class="card"><div class="eyebrow">GRILL TEMP</div><div class="big"><span id="grillTemp">218</span>°</div><div class="small">Sample reading · °F</div></div>
  </div>
  <h2>Setpoint preview</h2>
  <div class="card">
   <div class="row"><label for="target">Grill target</label><strong><span id="targetLabel">225</span>°F</strong></div>
-   <h2>Meat probes</h2>
+  <input id="target" type="range" min="165" max="500" step="5" value="225">
+  <div class="row small"><span>165°F</span><span>350°F</span><span>500°F</span></div>
+  <button class="primary" id="controlBtn">Test connection (not configured)</button>
+  <div class="notice">Demo only: this screen uses sample values. No commands are sent to your physical grill.</div>
+ </div>
+ <h2>Meat probes</h2>
  <p class="small">Tap a probe to choose a food and set its target temperature.</p>
  <div class="grid" style="margin-top:0">
   <div class="card probe-card" role="button" tabindex="0" data-probe="1" aria-label="Configure Probe 1">
@@ -138,9 +143,7 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 </nav>
 <script>
 const target=document.querySelector('#target');
-function setTarget(v){document.querySelector('#targetOut').textContent=v;document.querySelector('#targetLabel').textContent=v;document.querySelector('#tempBar').style.width=Math.max(0,Math.min(100,(218-150)/400*100))+'%'}
-target.addEventListener('input',e=>setTarget(e.target.value));
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.page))}));
+function setTarget(v){document.querySelector('#targetOut').textContent=v;document.querySelector('#targetLabel').textContent=v;document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.page))}));
 document.querySelector('#controlBtn').addEventListener('click',()=>alert('The CTP3 integration is not configured yet. No connection attempt or grill command was made.'));
 setTarget(target.value);
 
