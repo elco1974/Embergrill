@@ -143,7 +143,9 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
 </nav>
 <script>
 const target=document.querySelector('#target');
-function setTarget(v){document.querySelector('#targetOut').textContent=v;document.querySelector('#targetLabel').textContent=v;document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.page))}));
+function setTarget(v){document.querySelector('#targetOut').textContent=v;document.querySelector('#targetLabel').textContent=v;document.querySelector('#tempBar').style.width=Math.max(0,Math.min(100,(218-150)/400*100))+'%'}
+target.addEventListener('input',e=>setTarget(e.target.value));
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===tab.dataset.page))}));
 document.querySelector('#controlBtn').addEventListener('click',()=>alert('The CTP3 integration is not configured yet. No connection attempt or grill command was made.'));
 setTarget(target.value);
 
