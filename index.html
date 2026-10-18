@@ -127,6 +127,7 @@ main{max-width:680px;margin:auto;padding:16px 15px 100px}.grid{display:grid;grid
   <div class="row"><span class="small">App ecosystem</span><strong>GrillirG Control</strong></div><div class="line"></div>
   <div class="row"><span class="small">Connection</span><strong>Wi‑Fi / cloud</strong></div><div class="line"></div>
   <div class="row"><span class="small">Integration status</span><strong>Not configured</strong></div>
+  <div class="row"><span class="small">API connection</span><strong id="apiConnectionStatus">Not checked</strong></div>
   <div class="notice">The exact CTP3-W firmware and API compatibility still need verification. Credentials should be handled by a secure backend, never stored in this static app.</div>
  </div>
  <h2>Next development steps</h2>
@@ -273,7 +274,23 @@ console.log("Ember Grill API:", data);
 } catch (error) {
 console.error("Ember Grill API connection failed:", error);
 }
+async function updateApiStatus() {
+const label = document.getElementById("apiConnectionStatus");
+try {
+const response = await fetch(
+"https://embergrill-api.elco1974.workers.dev/health"
+);
+const data = await response.json();
+label.textContent = response.ok && data.ok
+? "Online"
+: "Unavailable";
+} catch (error) {
+label.textContent = "Offline";
 }
+}
+
+updateApiStatus();
+
 </script>
 </body>
 </html>
