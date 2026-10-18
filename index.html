@@ -263,6 +263,17 @@ document.querySelector('#saveRecipe').addEventListener('click',()=>{const name=d
 // Autosaving notepad
 const cookNotes=document.querySelector('#cookNotes'),notesStatus=document.querySelector('#notesStatus');try{cookNotes.value=localStorage.getItem('emberCookNotes')||''}catch(e){}cookNotes.addEventListener('input',()=>{try{localStorage.setItem('emberCookNotes',cookNotes.value);notesStatus.textContent='Saved just now · this device'}catch(e){notesStatus.textContent='Could not save in this browser'}});document.querySelector('#clearNotes').addEventListener('click',()=>{if(confirm('Clear all notes saved on this device?')){cookNotes.value='';try{localStorage.removeItem('emberCookNotes')}catch(e){}notesStatus.textContent='Notes cleared'}});
 
+async function testEmberApi() {
+try {
+const response = await fetch(
+"https://embergrill-api.elco1974.workers.dev/api/status"
+);
+const data = await response.json();
+console.log("Ember Grill API:", data);
+} catch (error) {
+console.error("Ember Grill API connection failed:", error);
+}
+}
 </script>
 </body>
 </html>
